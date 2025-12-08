@@ -1,0 +1,33 @@
+{
+  "name": "Baraj Nakliyat",
+  "short_name": "Baraj Nakliyat",
+  "description": "Adana Baraj Nakliyat resmi mobil uygulaması. Şehir içi ve şehirler arası güvenilir asansörlü nakliye hizmeti.",
+  "id": "/",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#dc2626",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2554/2554936.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2554/2554936.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2554/2554936.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ]
+}
