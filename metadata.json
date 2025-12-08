@@ -1,0 +1,7 @@
+{
+  "name": "Baraj Nakliyat",
+  "description": "Adana'nın en güvenilir nakliyat firması için mobil uyumlu web uygulaması. Hizmetler, teklif alma ve taşınma listesi içerir.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}

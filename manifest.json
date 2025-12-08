@@ -1,0 +1,16 @@
+{
+  "name": "Baraj Nakliyat",
+  "short_name": "Baraj Nakliyat",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#dc2626",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/7541/7541900.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
