@@ -1,0 +1,8 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "app.vercel.mobilbaraj.twa",
+    "sha256_cert_fingerprints": ["7D:24:80:F7:C6:ED:62:3E:0C:1C:93:6E:1D:F9:11:F2:FD:AF:23:8B:33:41:CC:99:07:2E:EB:02:48:87:43:4C"]
+  }
+}]
