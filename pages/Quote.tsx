@@ -1,6 +1,6 @@
-import React, { useState, useRef } from 'react';
-import { MapPin, Calendar, Camera, X, Check } from 'lucide-react';
-import { QuoteFormState } from '../types';
+import React, { useState } from 'react';
+import { MapPin, Calendar, Check, Phone } from 'lucide-react';
+import emailjs from '@emailjs/browser';
 
 const QuotePage: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -9,34 +9,12 @@ const QuotePage: React.FC = () => {
     date: '',
     phone: ''
   });
-  const [images, setImages] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleCameraClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImages(prev => [...prev, reader.result as string]);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const removeImage = (index: number) => {
-    setImages(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -44,32 +22,31 @@ const QuotePage: React.FC = () => {
     setIsSubmitting(true);
     
     try {
-      // Local Simulation
-      const newQuote: QuoteFormState = {
-        id: Date.now().toString(),
-        fromAddress: formData.from,
-        toAddress: formData.to,
-        date: formData.date,
+      // EmailJS Şablon parametreleri
+      const templateParams = {
+        from_address: formData.from,
+        to_address: formData.to,
+        move_date: formData.date,
         phone: formData.phone,
-        images: images,
-        timestamp: new Date().toLocaleString('tr-TR')
       };
-      
-      // Store to local storage just for simulation feel
-      const existingQuotes = JSON.parse(localStorage.getItem('baraj_quotes') || '[]');
-      localStorage.setItem('baraj_quotes', JSON.stringify([newQuote, ...existingQuotes]));
-      
-      await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate network request
+
+      // Senin verdiğin anahtarları buraya ekledim abi
+      await emailjs.send(
+        'service_44u8p04',      // Service ID
+        'template_canh2h5',    // Template ID
+        templateParams,
+        'AngTN1a2zi85nlwD4'    // Public Key
+      );
 
       setIsSuccess(true);
       setTimeout(() => {
         setIsSuccess(false);
         setFormData({ from: '', to: '', date: '', phone: '' });
-        setImages([]);
       }, 3000);
 
     } catch (error) {
-      console.error('Error submitting quote:', error);
+      console.error('Hata oluştu:', error);
+      alert("Teklif gönderilirken bir hata oluştu. Lütfen tekrar deneyin.");
     } finally {
       setIsSubmitting(false);
     }
@@ -82,7 +59,7 @@ const QuotePage: React.FC = () => {
           <Check size={40} />
         </div>
         <h2 className="text-2xl font-bold text-gray-800 mb-2">Talebiniz Alındı!</h2>
-        <p className="text-gray-600">Teklifiniz başarıyla oluşturuldu. En kısa sürede size dönüş yapacağız.</p>
+        <p className="text-gray-600">Teklif talebiniz başarıyla e-posta olarak gönderildi. En kısa sürede size dönüş yapacağız.</p>
       </div>
     );
   }
@@ -94,7 +71,6 @@ const QuotePage: React.FC = () => {
       <form onSubmit={handleSubmit} className="space-y-5">
         <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 space-y-4">
           
-          {/* Inputs */}
           <div className="space-y-1">
             <label className="text-xs font-semibold text-gray-500 uppercase ml-1">Nereden</label>
             <div className="relative">
@@ -145,58 +121,19 @@ const QuotePage: React.FC = () => {
           <div className="space-y-1">
             <label className="text-xs font-semibold text-gray-500 uppercase ml-1">Telefon</label>
             <div className="relative">
-              <span className="absolute left-3 top-3 text-gray-400 font-bold">+90</span>
+              <Phone className="absolute left-3 top-3 text-gray-400" size={20} />
               <input
                 type="tel"
                 name="phone"
                 required
                 value={formData.phone}
                 onChange={handleInputChange}
-                placeholder="5XX XXX XX XX"
-                className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-red-500 transition-colors"
+                placeholder="05XX XXX XX XX"
+                className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-red-500 transition-colors"
               />
             </div>
           </div>
 
-        </div>
-
-        {/* Camera Section */}
-        <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
-          <label className="text-sm font-bold text-gray-800 mb-3 block">Eşya Fotoğrafları (İsteğe Bağlı)</label>
-          <p className="text-xs text-gray-500 mb-4">Daha net bir fiyat teklifi için eşyalarınızın fotoğrafını çekip ekleyin.</p>
-          
-          <div className="flex flex-wrap gap-3">
-            {images.map((img, index) => (
-              <div key={index} className="relative w-20 h-20 rounded-lg overflow-hidden shadow-sm border border-gray-200">
-                <img src={img} alt="Upload" className="w-full h-full object-cover" />
-                <button
-                  type="button"
-                  onClick={() => removeImage(index)}
-                  className="absolute top-0 right-0 bg-red-600 text-white p-0.5 rounded-bl-lg"
-                >
-                  <X size={14} />
-                </button>
-              </div>
-            ))}
-            
-            <button
-              type="button"
-              onClick={handleCameraClick}
-              className="w-20 h-20 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center text-gray-400 hover:text-red-500 hover:border-red-400 transition-colors"
-            >
-              <Camera size={24} />
-              <span className="text-[10px] font-bold mt-1">Ekle</span>
-            </button>
-          </div>
-          
-          {/* Hidden File Input */}
-          <input
-            type="file"
-            accept="image/*"
-            ref={fileInputRef}
-            onChange={handleFileChange}
-            className="hidden"
-          />
         </div>
 
         <button
